@@ -15,26 +15,6 @@ require("dotenv").config();
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
-const TelegrafInlineMenu = require("telegraf-inline-menu");
-
-const menu = new TelegrafInlineMenu(ctx => `Hey ${ctx.from.first_name}!`);
-menu.setCommand("start");
-
-menu.simpleButton("I am excited!", "a", {
-  doFunc: ctx => ctx.reply("As am I!")
-});
-
-const mainMenu = new TelegrafInlineMenu("Main Menu");
-const fooMenu = new TelegrafInlineMenu("Foo Menu");
-const barMenu = new TelegrafInlineMenu("Bar Menu");
-
-mainMenu.submenu("Open Foo Menu", "foo", fooMenu);
-fooMenu.submenu("Open Bar Menu", "bar", barMenu);
-barMenu.simpleButton("Hit me", "something", {
-  doFunc: ctx => ctx.reply("Done something!")
-});
-
-bot.use(mainMenu.init());
 
 // // Register session middleware
 bot.use(session());
