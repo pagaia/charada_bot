@@ -5,7 +5,8 @@ const {
   searchEveryWhere,
   searchEveryWhereCount,
   getPoemById,
-  getPoemsList
+  getPoemsList,
+  getRandomPoem
 } = require("./fetchData");
 const { formatResponse } = require("./utility");
 
@@ -36,14 +37,18 @@ bot.hears(/search(@?.*) (.+)/, props => {
     const totRes = searchEveryWhereCount(param);
     const results = searchEveryWhere(param);
 
-    results.then(data => {
+    results.then(all => {
       totRes.then(data => {
         console.log("Tot Element: ", JSON.stringify(data.table.rows[0].c[0].v));
-        reply(`Results found: ${data.table.rows[0].c[0].v}`);
-      });
-      console.log("results: ", data.table.rows);
+        reply(`Poems which cointains ${param}: ${data.table.rows[0].c[0].v}`);
 
-      replyWithHTML(formatResponse(data));
+        const response = all.table.rows
+          .map(poem => {
+            return `/id_${poem.c[0].v} ${poem.c[1].v}`;
+          })
+          .join("\n");
+        reply(response);
+      });
     });
   } catch (err) {
     console.log("error: ", err);
@@ -51,7 +56,7 @@ bot.hears(/search(@?.*) (.+)/, props => {
 });
 
 // fetch exactly the poem with ID
-bot.hears(/id_(.+)(@.*)/, props => {
+bot.hears(/id_(.+)(@?.*)/, props => {
   const { match, replyWithHTML, reply } = props;
   console.log("Retrieving poem n° ", match);
   reply(`Retrieving poem n° ${match[1]}`);
@@ -66,7 +71,7 @@ bot.hears(/id_(.+)(@.*)/, props => {
   }
 });
 
-// fetch exactly the poem with ID
+// list all the poems titles with IDs
 bot.hears(/\/list(@?.*)/, props => {
   const { reply } = props;
   console.log("retrieving list of poems");
@@ -76,7 +81,6 @@ bot.hears(/\/list(@?.*)/, props => {
 
     results.then(data => {
       // build response
-      console.log("data.table.rows: ", data.table.rows);
       const response = data.table.rows
         .map(poem => {
           return `/id_${poem.c[0].v} ${poem.c[1].v}`;
@@ -89,6 +93,21 @@ bot.hears(/\/list(@?.*)/, props => {
   }
 });
 
+// get a random poem
+bot.hears(/\/random(@?.*)/, props => {
+  const { replyWithHTML } = props;
+  console.log("retrieving one poem");
+  reply("retrieving a random poem ");
+  try {
+    const results = getRandomPoem();
+
+    results.then(data => {
+      replyWithHTML(formatResponse(data));
+    });
+  } catch (err) {
+    console.log("error: ", err);
+  }
+});
 bot.start(ctx =>
   ctx.replyWithHTML(`Benvenuto su @charada_bot , bot da robot creato da @mrorme  @pagaia 
 Tramite questo bot potrai ricercare le poesie da me scritte e che puoi trovare sul blog charada.wordpress.com .

@@ -1,0 +1,29 @@
+{
+  "version": "0.6",
+  "reqId": "0",
+  "status": "ok",
+  "sig": "1541992490",
+  "table": {
+    "cols": [
+      { "id": "A", "label": "ID", "type": "number", "pattern": "General" },
+      { "id": "B", "label": "Title", "type": "string" },
+      { "id": "C", "label": "link", "type": "string" },
+      { "id": "D", "label": "pubDate", "type": "string" },
+      { "id": "G", "label": "content", "type": "string" }
+    ],
+    "rows": [
+      {
+        "c": [
+          { "v": 1.0, "f": "1" },
+          { "v": "La notte" },
+          { "v": "https://charada.wordpress.com/2007/02/02/la-notte" },
+          { "v": "Fri, 02 Feb 2007 15:54:19 +0000" },
+          {
+            "v": "Di notte il volo prende piede\ne le mie ali sbattono più veloci\nIl mio corpo si allontana\ne la mia mente si avvicina\na quel desiderio che ritrovo\nogni giorno, ogni mattina.\nOgni notte sempre più forte\nper farmi credere di essere inerme\no solamente per potermi dire:\n\u201CSi lo devi fare, non puoi soffrire.\u201D\nIn questa notte un\u2019altra lancetta è passata\npiù veloce del vento che alza le foglie\ndi un inverno mai arrivato.\nI momenti bisogna coglierli\nogni instante quelli belli\ne ogni tanto anche quelli.\nMa sono sempre tutti carichi\ndi una forte passione che ci porta via\na ricordar il tempo trascorso\nin un modo o nell\u2019altro\nandato"
+          }
+        ]
+      }
+    ],
+    "parsedNumHeaders": 0
+  }
+}
