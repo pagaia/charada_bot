@@ -1,4 +1,4 @@
-const {parseGJson} = require("./utility").default;
+const {parseGJson} = require("./utility");
 const fetch = require("node-fetch");
 
 const getPoemById = async id => {

@@ -67,7 +67,7 @@ bot.hears(/id_(.+)(@.*)/, props => {
 });
 
 // fetch exactly the poem with ID
-bot.hears(/\/list(@.*)/, props => {
+bot.hears(/\/list(@?.*)/, props => {
   const { reply } = props;
   console.log("retrieving list of poems");
   reply("retrieving list of poems");
