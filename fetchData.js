@@ -16,7 +16,7 @@ const getPoemById = async id => {
 };
 
 const searchEveryWhere = async text => {
-  const query = `SELECT A, B, C, D, G WHERE B CONTAINS '${text}' OR G CONTAINS '${text}' LIMIT 5`;
+  const query = `SELECT A, B WHERE B CONTAINS '${text}' OR G CONTAINS '${text}'`;
   const url = buildQuery(query);
 
   console.log("URL: ", url);
