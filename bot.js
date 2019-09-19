@@ -7,6 +7,7 @@ const {
   getPoemById,
   getPoemsList
 } = require("./fetchData");
+const { formatResponse } = require("./utility");
 
 const { reply } = Telegraf;
 require("dotenv").config();
@@ -27,28 +28,22 @@ bot.use((ctx, next) => {
 });
 
 // Wow! RegEx
-bot.hears(/search (.+)/, props => {
-  const { match, replyWithMarkdown, reply } = props;
+bot.hears(/search(@?.*) (.+)/, props => {
+  const { match, replyWithHTML, reply } = props;
 
+  const param = match[2];
   try {
-    const totRes = searchEveryWhereCount(match[1]);
-    const results = searchEveryWhere(match[1]);
+    const totRes = searchEveryWhereCount(param);
+    const results = searchEveryWhere(param);
 
     results.then(data => {
       totRes.then(data => {
         console.log("Tot Element: ", JSON.stringify(data.table.rows[0].c[0].v));
-        replyWithMarkdown(`Results found: ${data.table.rows[0].c[0].v}`);
+        reply(`Results found: ${data.table.rows[0].c[0].v}`);
       });
       console.log("results: ", data.table.rows);
-      // build response
-      const response = `_ID_ /id_${data.table.rows[0].c[0].v}
-_Title_ : ${data.table.rows[0].c[1].v}
-_Posted on_ : ${data.table.rows[0].c[3].v}
-_Url_ : ${data.table.rows[0].c[2].v}
-${data.table.rows[0].c[4].v}
-________
-`;
-      reply(response);
+
+      replyWithHTML(formatResponse(data));
     });
   } catch (err) {
     console.log("error: ", err);
@@ -56,24 +51,15 @@ ________
 });
 
 // fetch exactly the poem with ID
-bot.hears(/id_(.+)/, props => {
-  const { match, replyWithMarkdown, reply } = props;
+bot.hears(/id_(.+)(@.*)/, props => {
+  const { match, replyWithHTML, reply } = props;
   console.log("Retrieving poem n° ", match);
-  replyWithMarkdown(`Retrieving poem n° ${match[1]}`);
+  reply(`Retrieving poem n° ${match[1]}`);
   try {
     const results = getPoemById(match[1]);
 
     results.then(data => {
-      // build response
-      const response = `*ID*:  ${data.table.rows[0].c[0].v}
-*Title* : ${data.table.rows[0].c[1].v}
-*Posted on* : ${data.table.rows[0].c[3].v}
-*URL*: ${data.table.rows[0].c[2].v}
-
-${data.table.rows[0].c[4].v}
-
-`;
-      replyWithMarkdown(response);
+      replyWithHTML(formatResponse(data));
     });
   } catch (err) {
     console.log("error: ", err);
@@ -81,7 +67,7 @@ ${data.table.rows[0].c[4].v}
 });
 
 // fetch exactly the poem with ID
-bot.hears("/list", props => {
+bot.hears(/\/list(@.*)/, props => {
   const { reply } = props;
   console.log("retrieving list of poems");
   reply("retrieving list of poems");
@@ -112,12 +98,14 @@ Buona lettura :)
 `)
 );
 
-bot.help(ctx => ctx.replyWithMarkdown(`Questi sono i comandi che puoi usare:
+bot.help(ctx =>
+  ctx.replyWithMarkdown(`Questi sono i comandi che puoi usare:
 /start - la descrizione di questo bot
 /list - la lista completa delle poesie
 /search - search + le parole da cercare
 search - oppure semplicemente search e la parola da cercare
-`));
+`)
+);
 
 // Launch bot
 bot.launch();
