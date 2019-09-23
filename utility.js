@@ -8,7 +8,7 @@ const parseGJson = data => {
 
 const formatResponse = data => {
   const date = new Date(Date.parse(data.table.rows[0].c[3].v));
-  const month = date.toLocaleString("default", { month: "long" });
+  const month = date.toLocaleString('en-GB', { month: "long" });
   const day = date.getDate();
   const year = date.getFullYear();
 
